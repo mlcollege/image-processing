@@ -148,20 +148,20 @@ def get_conv_filter_control_params(shape, init_mode='diag_pos'):
     return controls_params
 
 
-def get_conv_filter_control_widget(widgets_children, shape):
+def get_conv_filter_control_widget(conv_filter_controls_params, shape):
     controls_matrix = list()
-    idx = 0
     for row_id in range(shape[0]):
         controls_matrix.append(list())
         for col_id in range(shape[1]):
-            widgets_children[idx].description = ''
-            controls_matrix[row_id].append(widgets_children[idx])
-            idx += 1
+            pos_id = str(row_id) + ", " + str(col_id)
+            conv_filter_controls_params[pos_id].description = ''
+            controls_matrix[row_id].append(conv_filter_controls_params[pos_id])
+
     return ipw.VBox([ipw.HBox(m, layout=ipw.Layout(align_items='stretch')) for m in controls_matrix],
                     layout=ipw.Layout(width='430px', height='430px', padding='15px 0px 0px 30px'))
 
 
-def conv_filter_widget(image, conv_filter_shape=(4, 4), stride_row=1, stride_col=1, init_mode='diag_pos'):
+def conv_filter_widget(image, conv_filter_shape=(4, 4), stride_row=1, stride_col=1, init_mode='diag_pos', padding="VALID"):
     conv_filter_shape[0] = min(6, conv_filter_shape[0])
     conv_filter_shape[1] = min(6, conv_filter_shape[1])
 
@@ -182,13 +182,19 @@ def conv_filter_widget(image, conv_filter_shape=(4, 4), stride_row=1, stride_col
             tf_image = tf.constant(image_reshaped)
             tf_conv_filter = tf.constant(conv_filter_reshaped)
             tf_conv_layer = tf.nn.conv2d(tf_image, tf_conv_filter,
-                                         strides=[1, stride_row, stride_col, 1], padding="VALID")
+                                         strides=[1, stride_row, stride_col, 1], padding=padding)
 
         with tf.Session(graph=graph) as sess:
             conv_layer = sess.run(tf_conv_layer)[0]
 
-        conv_layer_shape = (np.floor((28 - conv_filter_shape[0] + stride_row) / stride_row).astype(int),
-                            np.floor((28 - conv_filter_shape[1] + stride_col) / stride_col).astype(int))
+        if padding == 'VALID':
+            conv_layer_shape = (np.floor((28 - conv_filter_shape[0] + stride_row) / stride_row).astype(int),
+                                np.floor((28. - conv_filter_shape[1] + stride_col) / stride_col).astype(int))
+        elif padding == 'SAME':
+            conv_layer_shape = (np.ceil(28 / stride_row).astype(int),
+                                np.ceil(28 / stride_col).astype(int))
+        else:
+            raise AttributeError("Wrong Padding")
 
         fig = plt.figure(figsize=(15, 15))
         plt.subplots_adjust(left=0, right=0.9, top=0.9, bottom=0.1)
@@ -208,5 +214,5 @@ def conv_filter_widget(image, conv_filter_shape=(4, 4), stride_row=1, stride_col
 
     conv_filter_controls_params = get_conv_filter_control_params(conv_filter_shape, init_mode)
     widget = interactive(plot_conv_filter, **conv_filter_controls_params)
-    return ipw.VBox([get_conv_filter_control_widget(widget.children[:-1], conv_filter_shape),
+    return ipw.VBox([get_conv_filter_control_widget(conv_filter_controls_params, conv_filter_shape),
                      widget.children[-1]], layout=ipw.Layout(margin='50px 30px 50px 50px'))
