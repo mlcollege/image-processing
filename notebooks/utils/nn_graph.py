@@ -19,4 +19,6 @@ def simple_layer(name, input_data, shape, activation='linear'):
         output_data = tf.nn.relu(output_data)
     elif activation == 'sigmoid':
         output_data = tf.nn.sigmoid(output_data)
+    elif activation == 'tanh':
+        output_data = tf.nn.tanh(output_data)
     return output_data
