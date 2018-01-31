@@ -80,7 +80,7 @@ def get_false_positives(df, label_class_name, predicted_class_name=None):
     return df[condition].sort_values(by='predicted_class_score_top1', ascending=False)
 
 
-def plot_examples(df, img_shape=(28, 28)):
+def plot_examples(df, image_shape=(28, 28)):
     examples_count = min(25, len(df))
     cols = 5
     rows = np.ceil(examples_count / cols)
@@ -92,7 +92,7 @@ def plot_examples(df, img_shape=(28, 28)):
         img = df.image.iloc[img_id]
         if img is None:
             continue
-        img = img.reshape(img_shape)
+        img = img.reshape(image_shape)
         prediction_name = df.predicted_class_name_top1.iloc[img_id]
         prediction_score = df.predicted_class_score_top1.iloc[img_id]
 

@@ -46,10 +46,10 @@ def init_model_logging(base_dir, experiment, graph, remove_existing=True):
 def get_image_from_url(url, image_shape=[224, 224, 3]):
     response = requests.get(url)
     if response.status_code == 200:
-        img = Image.open(BytesIO(response.content)).convert('RGB').resize((image_shape[0], image_shape[1]))
+        img = Image.open(BytesIO(response.content)).convert('RGB').resize((image_shape[1], image_shape[0]))
     else:
         raise AttributeError("Wrong url")
-    return np.array(img).reshape([1, image_shape[0] * image_shape[1] * 3])
+    return np.array(img).reshape([image_shape[0] * image_shape[1] * image_shape[2]])
 
 
 class Dataset(object):
@@ -81,7 +81,7 @@ class Dataset(object):
         imgs = []
         for img in df.images:
             img_path = os.path.join(self.data_path_prefix, img)
-            np_img = np.array(Image.open(open(img_path, 'rb')).convert('RGB').resize((self.image_shape[0], self.image_shape[1])))
+            np_img = np.array(Image.open(open(img_path, 'rb')).convert('RGB').resize((self.image_shape[1], self.image_shape[0])))
             np_img = np_img.reshape(self.image_shape[0] * self.image_shape[1] * 3)
             if self.norm:
                 np_img = np_img / 255.
