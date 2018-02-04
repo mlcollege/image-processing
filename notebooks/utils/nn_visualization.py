@@ -58,15 +58,15 @@ def conv55124_summary(name, conv_filter):
     img_summaries(name, conv_image)
 
 
-def get_sprite_img(images, img_shape):
+def get_sprite_img(images, image_shape):
     image_cout = len(images)
-    h, w = img_shape[:2]
+    h, w = image_shape[:2]
 
     rows = int(np.ceil(np.sqrt(image_cout)))
     cols = rows
 
-    if len(img_shape) == 3:
-        sprite_img = np.zeros([rows * h, cols * w, img_shape[2]])
+    if len(image_shape) == 3:
+        sprite_img = np.zeros([rows * h, cols * w, image_shape[2]])
     else:
         sprite_img = np.zeros([rows * h, cols * w])
 
@@ -74,7 +74,7 @@ def get_sprite_img(images, img_shape):
     for row_id in range(rows):
         for col_id in range(cols):
             if image_id >= image_cout:
-                if len(img_shape) == 3:
+                if len(image_shape) == 3:
                     sprite_img = Image.fromarray(np.uint8(sprite_img))
                 else:
                     sprite_img = Image.fromarray(np.uint8(sprite_img * 0xFF))
@@ -82,7 +82,7 @@ def get_sprite_img(images, img_shape):
 
             row_pos = row_id * h
             col_pos = col_id * w
-            sprite_img[row_pos:row_pos + h, col_pos:col_pos + w] = images[image_id].reshape(img_shape)
+            sprite_img[row_pos:row_pos + h, col_pos:col_pos + w] = images[image_id].reshape(image_shape)
             image_id += 1
 
 
@@ -96,13 +96,13 @@ def save_label_class_names(label_class_names, path):
             fw.write(name + '\n')
 
 
-def init_embedding_projector(file_writer, embedding, img_shape):
+def init_embedding_projector(file_writer, embedding, image_shape):
     projector_config = projector.ProjectorConfig()
     embedding_config = projector_config.embeddings.add()
     embedding_config.tensor_name = embedding.name
     embedding_config.metadata_path = 'label_class_names.tsv'
     embedding_config.sprite.image_path = 'sprite_img.png'
-    embedding_config.sprite.single_image_dim.extend((img_shape[0], img_shape[1]))
+    embedding_config.sprite.single_image_dim.extend((image_shape[0], image_shape[1]))
     projector.visualize_embeddings(file_writer, projector_config)
 
 

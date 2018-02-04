@@ -25,7 +25,7 @@ def get_info_df(labels, predictions, class_id2class_name_mapping, images=None):
         if label_class_id in predicted_class_ids_triplet:
             class_id = label_class_id
         else:
-            class_id = predicted_class_ids_triplet[0]
+            class_id = predicted_class_ids_triplet[2]
         selection_class_ids_top3.append(class_id)
         predicted_class_names_top3.append(class_id2class_name_mapping[class_id])
     predicted_class_scores_top3 = predictions[np.arange(example_count), selection_class_ids_top3].tolist()
@@ -47,6 +47,8 @@ def get_info_df(labels, predictions, class_id2class_name_mapping, images=None):
 def get_recall(df, class_name):
     true_positives = len(df[(df.label_class_name == class_name) & (df.predicted_class_name_top1 == class_name)])
     trues = len(df[(df.label_class_name == class_name)])
+    if trues == 0:
+        trues = 1
     return round(true_positives / trues * 100, 2)
 
 
