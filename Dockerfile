@@ -9,8 +9,9 @@ RUN mkdir /notebooks
 RUN mkdir /tensorboard_summaries
 RUN mkdir /data
 COPY ./data /data
-#COPY ./notebooks/4b_conv_img_net_complete.ipynb /notebooks
-#COPY ./notebooks/utils /notebooks/utils
+COPY ./notebooks/ /notebooks
+COPY ./notebooks/utils /notebooks/utils
+COPY ./tensorboard_summaries /tensorboard_summaries
 
 # install all OS dependencies for fully functional notebook server
 RUN apt-get update && apt-get install -yq --no-install-recommends \
