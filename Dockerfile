@@ -6,7 +6,7 @@ ENV SHELL /bin/bash
 EXPOSE 8000 6006
 
 RUN mkdir /notebooks
-RUN mkdir /tensorboard_summaries
+RUN mkdir /tensorboard_summaries_mnt
 RUN mkdir /data
 COPY ./data /data
 COPY ./notebooks/ /notebooks
