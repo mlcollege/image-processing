@@ -9,7 +9,7 @@ def simple_layer(name, input_data, shape, activation='linear'):
         w = tf.get_variable(w_name, shape=shape, initializer=tf.contrib.layers.variance_scaling_initializer())
     else:
         w = tf.get_variable(w_name, shape=shape, initializer=tf.contrib.layers.xavier_initializer())
-    bias = tf.get_variable(b_name, initializer=tf.constant_initializer(0.1), shape=shape[1])
+    bias = tf.get_variable(b_name, initializer=tf.constant_initializer(0.), shape=shape[1])
 
     variable_summaries(w_name + 'summary', w)
     variable_summaries(b_name + 'summary', bias)
