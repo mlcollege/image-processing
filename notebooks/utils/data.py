@@ -43,23 +43,27 @@ def init_model_logging(base_dir, experiment, graph, remove_existing=True):
     return logging_meta
 
 
-def get_image_from_url(url, image_shape=[224, 224, 3]):
+def get_image_from_url(url, image_shape=[224, 224, 3], reshape=True):
     response = requests.get(url)
     if response.status_code == 200:
         img = Image.open(BytesIO(response.content)).convert('RGB').resize((image_shape[1], image_shape[0]))
     else:
         raise AttributeError("Wrong url")
-    return np.array(img).reshape([image_shape[0] * image_shape[1] * image_shape[2]])
+    if reshape:
+        return np.array(img).reshape([image_shape[0] * image_shape[1] * image_shape[2]])
+    else:
+        return np.array(img)
 
 
 class Dataset(object):
-    def __init__(self, dataframe, data_path_prefix, image_shape=[224, 224, 3], one_hot=False, norm=False):
+    def __init__(self, dataframe, data_path_prefix, image_shape=[224, 224, 3], one_hot=False, norm=False, reshape=True):
         self.data = pd.read_hdf(dataframe, 'data')
         self.data = self.data.sample(frac=1)
         self.data_path_prefix = data_path_prefix
         self.image_shape = image_shape
         self.one_hot = one_hot
         self.norm = norm
+        self.reshape = reshape
 
     @property
     def images(self):
@@ -82,7 +86,8 @@ class Dataset(object):
         for img in df.images:
             img_path = os.path.join(self.data_path_prefix, img)
             np_img = np.array(Image.open(open(img_path, 'rb')).convert('RGB').resize((self.image_shape[1], self.image_shape[0])))
-            np_img = np_img.reshape(self.image_shape[0] * self.image_shape[1] * 3)
+            if self.reshape:
+                np_img = np_img.reshape(self.image_shape[0] * self.image_shape[1] * 3)
             if self.norm:
                 np_img = np_img / 255.
             imgs.append(np_img)
