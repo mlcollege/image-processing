@@ -86,9 +86,12 @@ class Dataset(object):
         for img in df.images:
             img_path = os.path.join(self.data_path_prefix, img)
             np_img = np.array(Image.open(open(img_path, 'rb')).convert('RGB').resize((self.image_shape[1], self.image_shape[0])))
-            if self.reshape:
-                np_img = np_img.reshape(self.image_shape[0] * self.image_shape[1] * 3)
+            np_img = np_img.reshape(self.image_shape[0] * self.image_shape[1] * 3)
             if self.norm:
                 np_img = np_img / 255.
             imgs.append(np_img)
-        return np.vstack(imgs)
+        stacked_imgs = np.vstack(imgs)
+        if self.reshape==False:
+            return stacked_imgs.reshape([-1]+self.image_shape)
+        else:
+            return stacked_imgs
