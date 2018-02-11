@@ -6,6 +6,7 @@
 
 ### Materials
 Workshop presentation available [online](https://docs.google.com/presentation/d/1hRGbJaGzqyYR-2YkLJCGLKvdMUvuRUchIRYHsm2lLDE/edit?usp=sharing).  
+QA @ [mlcollege slack #image-processing](https://mlcollege.slack.com/messages/C9629K188/)  
 My public list of news from ML: [Research Monthly](https://docs.google.com/document/d/1Gq1peza9okW0XxszS7nMKSUvk68rxNfiWhDmZHLV0dU/edit?usp=sharing)
 
 #### Blogs
