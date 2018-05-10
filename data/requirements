@@ -20,6 +20,6 @@ seaborn==0.8.1
 sklearn==0.0
 tables==3.4.2
 tensorflow==1.8.0
-keras
+keras==2.1.6
 tensorflow-tensorboard
 urllib3==1.22
