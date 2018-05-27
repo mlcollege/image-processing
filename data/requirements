@@ -19,7 +19,7 @@ scipy==0.19.1
 seaborn==0.8.1
 sklearn==0.0
 tables==3.4.2
-tensorflow==1.8.0
-keras==2.1.6
-tensorflow-tensorboard
+keras==2.1.2
 urllib3==1.22
+tensorflow==1.4.0
+tensorflow-tensorboard==0.4.0rc2
