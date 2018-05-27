@@ -38,7 +38,6 @@ ENV LANG='C.UTF-8' LC_ALL='C.UTF-8'
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     libatlas-dev \
     python3-numpy \
-    python3-scipy \
     python3-pillow \
     && apt-get clean
 
@@ -47,6 +46,8 @@ RUN pip3 install -U setuptools
 RUN pip3 install --upgrade ipython[notebook] ipywidgets
 RUN pip3 install --upgrade matplotlib
 RUN pip3 install -r /data/requirements
+RUN pip3 install http://download.pytorch.org/whl/cpu/torch-0.4.0-cp35-cp35m-linux_x86_64.whl 
+RUN pip3 install torchvision
 RUN jupyter nbextension enable --py widgetsnbextension
 
 COPY run.sh /
