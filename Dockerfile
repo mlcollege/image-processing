@@ -8,10 +8,9 @@ EXPOSE 8000 6006
 RUN mkdir /notebooks
 RUN mkdir /tensorboard_summaries_mnt
 RUN mkdir /data
-COPY ./data /data
-COPY ./notebooks/ /notebooks
-COPY ./notebooks/utils /notebooks/utils
-COPY ./tensorboard_summaries /tensorboard_summaries
+COPY ./data/ /data/
+COPY ./notebooks/ /notebooks/
+COPY ./tensorboard_summaries/ /tensorboard_summaries/
 
 # install all OS dependencies for fully functional notebook server
 RUN apt-get update && apt-get install -yq --no-install-recommends \
